@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -24,11 +23,11 @@ namespace TrackHours
 
             if (isLoggedIn)
             {
-                PrintWorkInfo();
                 totalTimeTillDate += timerInterval;
 
                 File.WriteAllText(fileInfo.FullName, totalTimeTillDate.ToString());
 
+                PrintWorkInfo();
                 t.Change(timerInterval, Timeout.Infinite);
             } else
             {
@@ -81,11 +80,12 @@ namespace TrackHours
 
         private static void PrintWorkInfo()
         {
-            int daysSinceFileCreated = (int) DateTime.UtcNow.Subtract(fileInfo.CreationTimeUtc).TotalDays;
-            int expectedHoursTillDate = 8 * (daysSinceFileCreated < 1 ? 1 : daysSinceFileCreated);
-            var totalWorkHoursPerLogs = Humanizer.NumberToTimeSpanExtensions.Milliseconds(totalTimeTillDate).Hours;
+            var daysSinceFileCreated = DateTime.UtcNow.Subtract(fileInfo.CreationTimeUtc).TotalDays;
+            var expectedHoursTillDate = TimeSpan.FromHours(8 * (daysSinceFileCreated < 1 ? 1 : daysSinceFileCreated));
+            var totalWorkHoursPerLogs = TimeSpan.FromMilliseconds(totalTimeTillDate);
             var extraHours = totalWorkHoursPerLogs - expectedHoursTillDate;
-            Logger.Info($"Actual hours - {totalWorkHoursPerLogs}, Expected - {expectedHoursTillDate}, Extra hours - {extraHours}, IsLoggedIn - {Process.GetProcessesByName("logonui").Any()}, Total msec - {totalTimeTillDate}");
+            
+            Logger.Info($"Actual hours - {totalWorkHoursPerLogs}, Expected - {expectedHoursTillDate}, Extra hours - {extraHours}, Total msec - {totalTimeTillDate}");
         }
 
         protected override void OnStop()

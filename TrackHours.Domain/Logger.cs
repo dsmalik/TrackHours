@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TrackHours
+namespace TrackHours.Domain
 {
-    internal class Logger
+    public class Logger
     {
         public static void Info(string message)
         {
             Trace.WriteLine($"TrackHours: {DateTime.Now.ToShortTimeString()} - {message}");
+            Console.WriteLine($"TrackHours: {DateTime.Now.ToShortTimeString()} - {message}");
         }
     }
 }

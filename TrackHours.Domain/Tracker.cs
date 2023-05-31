@@ -87,7 +87,7 @@ namespace TrackHours.Domain
 
         private static string Format(TimeSpan timeSpan)
         {
-            return $"{Math.Floor(timeSpan.TotalHours)}:{Math.Abs(timeSpan.Minutes)}";
+            return $"{(int)timeSpan.TotalHours}:{Math.Abs(timeSpan.Minutes)}";
         }
 
         public static void OnStop()
